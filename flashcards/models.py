@@ -1,14 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.timezone import now
 
+def get_fecha_hoy():
+    return now().date()
 
 class UserSettings(models.Model):
     """Configuración personal de cada usuario"""
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='settings')
     max_tarjetas_nuevas_diarias = models.IntegerField(default=10)
     tarjetas_nuevas_hoy = models.IntegerField(default=0)
-    ultima_fecha_reset = models.DateField(default=timezone.now)
+    ultima_fecha_reset = models.DateField(default=get_fecha_hoy)  
     
     class Meta:
         verbose_name = "Configuración de Usuario"
@@ -24,7 +27,6 @@ class UserSettings(models.Model):
             self.tarjetas_nuevas_hoy = 0
             self.ultima_fecha_reset = hoy
             self.save()
-
 
 class Card(models.Model):
     """Tarjeta de estudio con sistema de repetición espaciada"""
