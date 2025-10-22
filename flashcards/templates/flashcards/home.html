@@ -45,7 +45,14 @@
     </div>
 </div>
 
-<div style="margin-top: 40px; text-align: center;">
+<div style="margin-top: 40px; text-align: center; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+    {% if tarjetas_pendientes > 0 %}
+    <a href="{% url 'sesion_repaso' %}" class="btn" style="font-size: 20px; padding: 18px 40px; background: #28a745;">
+        🎯 Comenzar Repaso ({{ tarjetas_pendientes }} pendiente{{ tarjetas_pendientes|pluralize }})
+    </a>
+    {% endif %}
     <a href="{% url 'crear_tarjeta' %}" class="btn" style="font-size: 18px; padding: 15px 30px;">➕ Crear Nueva Tarjeta</a>
 </div>
+
+
 {% endblock %}

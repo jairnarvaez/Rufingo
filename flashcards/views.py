@@ -5,7 +5,8 @@ from django.http import JsonResponse
 from .models import Card, UserSettings
 from .utils import get_next_card, update_card
 from django.utils import timezone
-
+from django.views.decorators.http import require_POST
+import json
 
 @login_required
 def home(request):
@@ -197,3 +198,62 @@ def estadisticas(request):
     }
     
     return render(request, 'flashcards/estadisticas.html', context)
+
+@login_required
+def sesion_repaso(request):
+    """Vista principal de la sesión de repaso"""
+    user = request.user
+    
+    # Obtener la siguiente tarjeta
+    card = get_next_card(user)
+    
+    if not card:
+        # No hay tarjetas pendientes
+        return render(request, 'flashcards/sin_tarjetas.html')
+    
+    context = {
+        'card': card,
+    }
+    
+    return render(request, 'flashcards/sesion_repaso.html', context)
+
+
+@login_required
+@require_POST
+def procesar_respuesta(request):
+    """Procesa la respuesta del usuario a una tarjeta"""
+    try:
+        data = json.loads(request.body)
+        card_id = data.get('card_id')
+        calificacion_base = int(data.get('calificacion_base'))
+        tiempo_respuesta = float(data.get('tiempo_respuesta'))
+        
+        # Validar datos
+        if not card_id or calificacion_base < 0 or calificacion_base > 5:
+            return JsonResponse({'error': 'Datos inválidos'}, status=400)
+        
+        # Obtener tarjeta
+        card = get_object_or_404(Card, id=card_id, usuario=request.user)
+        
+        # Actualizar tarjeta
+        update_card(card, calificacion_base, tiempo_respuesta)
+        
+        # Obtener siguiente tarjeta
+        siguiente_card = get_next_card(request.user)
+        
+        response_data = {
+            'success': True,
+            'mensaje': '✅ Respuesta registrada',
+            'siguiente_tarjeta': siguiente_card.id if siguiente_card else None,
+        }
+        
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@login_required
+def resultado_repaso(request):
+    """Vista de resultados después de completar el repaso"""
+    return render(request, 'flashcards/resultado_repaso.html')

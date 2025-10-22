@@ -1,0 +1,278 @@
+{% extends 'flashcards/base.html' %}
+
+{% block title %}Sesión de Repaso - Rufingo{% endblock %}
+
+{% block extra_css %}
+<style>
+    .flashcard {
+        perspective: 1000px;
+        min-height: 400px;
+        margin: 30px auto;
+        max-width: 600px;
+    }
+    
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        min-height: 400px;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+    }
+    
+    .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+    
+    .flashcard-front, .flashcard-back {
+        position: absolute;
+        width: 100%;
+        min-height: 400px;
+        backface-visibility: hidden;
+        border-radius: 15px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .flashcard-front {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .flashcard-back {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        transform: rotateY(180deg);
+    }
+    
+    .card-content {
+        font-size: 24px;
+        line-height: 1.6;
+        word-wrap: break-word;
+    }
+    
+    .timer {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-size: 24px;
+        font-weight: bold;
+        color: #667eea;
+        z-index: 1000;
+    }
+    
+    .botones-calificacion {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .btn-calificacion {
+        padding: 15px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: white;
+        min-width: 120px;
+    }
+    
+    .btn-calificacion:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-cal-5 { background: #28a745; }
+    .btn-cal-4 { background: #5cb85c; }
+    .btn-cal-3 { background: #ffc107; }
+    .btn-cal-2 { background: #fd7e14; }
+    .btn-cal-1 { background: #dc3545; }
+    .btn-cal-0 { background: #6c757d; }
+    
+    .flip-btn {
+        margin-top: 30px;
+        padding: 15px 40px;
+        background: rgba(255, 255, 255, 0.3);
+        border: 2px solid white;
+        color: white;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .flip-btn:hover {
+        background: rgba(255, 255, 255, 0.5);
+        transform: scale(1.05);
+    }
+    
+    .info-tarjeta {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    
+    .loading {
+        text-align: center;
+        padding: 40px;
+        font-size: 20px;
+        color: #667eea;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="timer" id="timer">⏱️ 0.0s</div>
+
+<h1 style="text-align: center;">📚 Sesión de Repaso</h1>
+
+<div class="flashcard" id="flashcard">
+    <div class="flashcard-inner">
+        <div class="flashcard-front">
+            <div>
+                <div style="font-size: 16px; opacity: 0.8; margin-bottom: 20px;">PREGUNTA</div>
+                <div class="card-content">{{ card.frente }}</div>
+                <button class="flip-btn" onclick="voltearTarjeta()">🔄 Ver Respuesta</button>
+                <div class="info-tarjeta">
+                    <div>Estado: <strong>{{ card.get_estado_display }}</strong></div>
+                    <div>Fase: <strong>{{ card.fase }}</strong></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flashcard-back">
+            <div>
+                <div style="font-size: 16px; opacity: 0.8; margin-bottom: 20px;">RESPUESTA</div>
+                <div class="card-content">{{ card.reverso }}</div>
+                
+                <div style="margin-top: 30px; font-size: 18px; margin-bottom: 15px;">
+                    ¿Qué tan bien lo recordaste?
+                </div>
+                
+                <div class="botones-calificacion">
+                    <button class="btn-calificacion btn-cal-5" onclick="calificar(5)">
+                        😄<br>Perfecto
+                    </button>
+                    <button class="btn-calificacion btn-cal-4" onclick="calificar(4)">
+                        🙂<br>Bien
+                    </button>
+                    <button class="btn-calificacion btn-cal-3" onclick="calificar(3)">
+                        😐<br>Con Esfuerzo
+                    </button>
+                    <button class="btn-calificacion btn-cal-2" onclick="calificar(2)">
+                        😕<br>Difícil
+                    </button>
+                    <button class="btn-calificacion btn-cal-1" onclick="calificar(1)">
+                        😞<br>Mal
+                    </button>
+                    <button class="btn-calificacion btn-cal-0" onclick="calificar(0)">
+                        😢<br>No recordé
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loading" class="loading" style="display: none;">
+    <div>⏳ Procesando respuesta...</div>
+</div>
+
+<script>
+    const cardId = {{ card.id }};
+    let startTime = performance.now();
+    let timerInterval;
+    let isFlipped = false;
+    
+    // Iniciar temporizador
+    function iniciarTimer() {
+        timerInterval = setInterval(() => {
+            const elapsed = (performance.now() - startTime) / 1000;
+            document.getElementById('timer').textContent = `⏱️ ${elapsed.toFixed(1)}s`;
+        }, 100);
+    }
+    
+    // Voltear tarjeta
+    function voltearTarjeta() {
+        const flashcard = document.getElementById('flashcard');
+        flashcard.classList.add('flipped');
+        isFlipped = true;
+    }
+    
+    // Calificar respuesta
+    async function calificar(calificacion) {
+        if (!isFlipped) {
+            alert('⚠️ Primero debes ver la respuesta');
+            return;
+        }
+        
+        clearInterval(timerInterval);
+        const tiempoRespuesta = (performance.now() - startTime) / 1000;
+        
+        // Mostrar loading
+        document.getElementById('flashcard').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+        
+        try {
+            const response = await fetch('{% url "procesar_respuesta" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    card_id: cardId,
+                    calificacion_base: calificacion,
+                    tiempo_respuesta: tiempoRespuesta
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                if (data.siguiente_tarjeta) {
+                    // Recargar página para siguiente tarjeta
+                    window.location.href = '{% url "sesion_repaso" %}';
+                } else {
+                    // No hay más tarjetas
+                    window.location.href = '{% url "resultado_repaso" %}';
+                }
+            } else {
+                alert('❌ Error: ' + data.error);
+                location.reload();
+            }
+        } catch (error) {
+            alert('❌ Error al procesar la respuesta: ' + error);
+            location.reload();
+        }
+    }
+    
+    // Iniciar al cargar
+    iniciarTimer();
+    
+    // Atajos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === ' ' && !isFlipped) {
+            e.preventDefault();
+            voltearTarjeta();
+        } else if (isFlipped && e.key >= '0' && e.key <= '5') {
+            calificar(parseInt(e.key));
+        }
+    });
+</script>
+{% endblock %}

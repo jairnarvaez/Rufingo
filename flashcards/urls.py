@@ -9,4 +9,9 @@ urlpatterns = [
     path('tarjetas/<int:card_id>/eliminar/', views.eliminar_tarjeta, name='eliminar_tarjeta'),
     path('tarjetas/<int:card_id>/reiniciar/', views.reiniciar_tarjeta, name='reiniciar_tarjeta'),
     path('estadisticas/', views.estadisticas, name='estadisticas'),
+    
+    # Rutas de repaso
+    path('repaso/', views.sesion_repaso, name='sesion_repaso'),
+    path('api/respuesta/', views.procesar_respuesta, name='procesar_respuesta'),
+    path('repaso/completado/', views.resultado_repaso, name='resultado_repaso'),
 ]

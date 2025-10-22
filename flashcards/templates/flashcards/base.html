@@ -1,8 +1,11 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
     <title>{% block title %}Rufingo{% endblock %}</title>
     <style>
         * {
@@ -166,5 +169,13 @@
     </div>
     
     {% block extra_js %}{% endblock %}
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/service-worker.js')
+                .then(registration => console.log('SW registrado'))
+                .catch(error => console.log('Error SW:', error));
+        }
+    </script>
 </body>
 </html>

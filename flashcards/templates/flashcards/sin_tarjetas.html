@@ -1,0 +1,30 @@
+{% extends 'flashcards/base.html' %}
+
+{% block title %}Sin Tarjetas Pendientes - Rufingo{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 60px 20px;">
+    <div style="font-size: 120px; margin-bottom: 30px;">🎉</div>
+    <h1 style="font-size: 36px; margin-bottom: 20px;">¡Excelente Trabajo!</h1>
+    <p style="font-size: 20px; color: #666; margin-bottom: 40px;">
+        No tienes tarjetas pendientes en este momento.
+    </p>
+    
+    <div style="background: #e7f3ff; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto 40px;">
+        <p style="font-size: 18px; color: #1976D2; margin-bottom: 15px;">
+            💡 <strong>Sugerencias:</strong>
+        </p>
+        <ul style="text-align: left; color: #1976D2; line-height: 2;">
+            <li>Crea nuevas tarjetas para seguir aprendiendo</li>
+            <li>Revisa tus estadísticas de progreso</li>
+            <li>Vuelve más tarde para repasar tarjetas programadas</li>
+        </ul>
+    </div>
+    
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a href="{% url 'home' %}" class="btn" style="font-size: 18px; padding: 15px 30px;">🏠 Ir al Inicio</a>
+        <a href="{% url 'crear_tarjeta' %}" class="btn" style="font-size: 18px; padding: 15px 30px;">➕ Crear Tarjeta</a>
+        <a href="{% url 'estadisticas' %}" class="btn btn-secondary" style="font-size: 18px; padding: 15px 30px;">📊 Ver Estadísticas</a>
+    </div>
+</div>
+{% endblock %}
