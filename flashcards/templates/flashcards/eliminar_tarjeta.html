@@ -1,0 +1,24 @@
+{% extends 'flashcards/base.html' %}
+
+{% block title %}Eliminar Tarjeta - Rufingo{% endblock %}
+
+{% block content %}
+<h1>🗑️ Eliminar Tarjeta</h1>
+
+<div style="max-width: 600px; margin: 30px auto; text-align: center;">
+    <div style="background: #fff3cd; padding: 20px; border-radius: 8px; border: 2px solid #ffc107; margin-bottom: 30px;">
+        <p style="font-size: 18px; margin-bottom: 15px;">⚠️ ¿Estás seguro de que deseas eliminar esta tarjeta?</p>
+        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+            <strong>Pregunta:</strong> {{ tarjeta.frente }}<br>
+            <strong>Respuesta:</strong> {{ tarjeta.reverso }}
+        </div>
+        <p style="color: #856404; margin-top: 15px;">Esta acción no se puede deshacer.</p>
+    </div>
+    
+    <form method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">🗑️ Sí, Eliminar</button>
+        <a href="{% url 'lista_tarjetas' %}" class="btn btn-secondary">❌ Cancelar</a>
+    </form>
+</div>
+{% endblock %}

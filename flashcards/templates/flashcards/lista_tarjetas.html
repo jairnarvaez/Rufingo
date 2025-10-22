@@ -1,0 +1,73 @@
+{% extends 'flashcards/base.html' %}
+
+{% block title %}Mis Tarjetas - Rufingo{% endblock %}
+
+{% block content %}
+<h1>📚 Mis Tarjetas</h1>
+
+<div style="margin: 20px 0; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+    <form method="get" style="display: flex; gap: 10px; flex-wrap: wrap; flex: 1;">
+        <input type="text" name="q" placeholder="🔍 Buscar..." value="{{ busqueda }}" 
+               style="padding: 8px 15px; border: 2px solid #ddd; border-radius: 5px; flex: 1; min-width: 200px;">
+        
+        <select name="estado" style="padding: 8px 15px; border: 2px solid #ddd; border-radius: 5px;">
+            <option value="">Todos los estados</option>
+            <option value="nuevo" {% if filtro_estado == 'nuevo' %}selected{% endif %}>Nuevo</option>
+            <option value="aprendizaje" {% if filtro_estado == 'aprendizaje' %}selected{% endif %}>Aprendizaje</option>
+            <option value="consolidacion" {% if filtro_estado == 'consolidacion' %}selected{% endif %}>Consolidación</option>
+            <option value="maduro" {% if filtro_estado == 'maduro' %}selected{% endif %}>Maduro</option>
+        </select>
+        
+        <select name="fase" style="padding: 8px 15px; border: 2px solid #ddd; border-radius: 5px;">
+            <option value="">Todas las fases</option>
+            <option value="1" {% if filtro_fase == '1' %}selected{% endif %}>Fase 1</option>
+            <option value="2" {% if filtro_fase == '2' %}selected{% endif %}>Fase 2</option>
+            <option value="3" {% if filtro_fase == '3' %}selected{% endif %}>Fase 3</option>
+        </select>
+        
+        <button type="submit" class="btn">Filtrar</button>
+        <a href="{% url 'lista_tarjetas' %}" class="btn btn-secondary">Limpiar</a>
+    </form>
+    
+    <a href="{% url 'crear_tarjeta' %}" class="btn">➕ Nueva</a>
+</div>
+
+{% if tarjetas %}
+<div style="margin-top: 30px;">
+    {% for tarjeta in tarjetas %}
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+        <div style="display: flex; justify-content: space-between; align-items: start; gap: 20px;">
+            <div style="flex: 1;">
+                <h3 style="color: #333; margin-bottom: 10px;">{{ tarjeta.frente }}</h3>
+                <p style="color: #666; margin-bottom: 15px;">{{ tarjeta.reverso }}</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; font-size: 14px;">
+                    <span style="background: #667eea; color: white; padding: 4px 12px; border-radius: 15px;">
+                        Estado: {{ tarjeta.get_estado_display }}
+                    </span>
+                    <span style="background: #764ba2; color: white; padding: 4px 12px; border-radius: 15px;">
+                        Fase {{ tarjeta.fase }}
+                    </span>
+                    <span style="background: #28a745; color: white; padding: 4px 12px; border-radius: 15px;">
+                        ✓ {{ tarjeta.contador_aciertos }}
+                    </span>
+                    <span style="background: #dc3545; color: white; padding: 4px 12px; border-radius: 15px;">
+                        ✗ {{ tarjeta.contador_fallos }}
+                    </span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-direction: column;">
+                <a href="{% url 'editar_tarjeta' tarjeta.id %}" class="btn" style="padding: 8px 16px; text-align: center;">✏️ Editar</a>
+                <a href="{% url 'reiniciar_tarjeta' tarjeta.id %}" class="btn btn-secondary" style="padding: 8px 16px; text-align: center;">🔄 Reiniciar</a>
+                <a href="{% url 'eliminar_tarjeta' tarjeta.id %}" class="btn btn-danger" style="padding: 8px 16px; text-align: center;">🗑️ Eliminar</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p style="text-align: center; color: #666; margin-top: 50px; font-size: 18px;">
+    No hay tarjetas que coincidan con los filtros. 
+    <a href="{% url 'crear_tarjeta' %}" style="color: #667eea;">Crea tu primera tarjeta</a>
+</p>
+{% endif %}
+{% endblock %}
