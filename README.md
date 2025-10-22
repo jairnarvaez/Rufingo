@@ -27,9 +27,6 @@ El objetivo es que el usuario adquiera rápidamente la nueva información y se f
 * 25 segundos
 * 2 minutos
 * 10 minutos
-* 1 hora
-* 5 horas
-* 1 día
 
 **Tarjetas de memoria (Flashcards):**
 
