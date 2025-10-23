@@ -169,13 +169,47 @@
     </div>
     
     {% block extra_js %}{% endblock %}
-    <script>
-        // Registrar Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/static/service-worker.js')
-                .then(registration => console.log('SW registrado'))
-                .catch(error => console.log('Error SW:', error));
-        }
-    </script>
+
+	<button onclick="probarNotificacion()" class="btn" style="margin-top: 20px;">
+	    🔔 Probar Notificación
+	</button>
+
+	<script>
+	function probarNotificacion() {
+	    if (Notification.permission === 'granted') {
+	        navigator.serviceWorker.getRegistration().then(reg => {
+	            if (reg) {
+	                reg.showNotification('Rufingo', {
+	                    body: 'Esto es una notificación de prueba 💪',
+	                    icon: '/static/icon-192.png',
+	                    vibrate: [200, 100, 200],
+	                    tag: 'test-notification'
+	                });
+	            }
+	        });
+	    } else {
+	        alert('Debes permitir las notificaciones primero.');
+	    }
+	}
+	</script>
+
+	    
+	<script>
+	if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/service-worker.js')
+	        .then(reg => {
+	            console.log('SW registrado', reg);
+
+	            // Solicitar permiso de notificaciones
+	            if (Notification.permission === 'default') {
+	                Notification.requestPermission().then(result => {
+	                    console.log('Permiso notificaciones:', result);
+	                });
+	            }
+	        })
+	        .catch(err => console.log('Error SW:', err));
+	}
+	</script>
+
 </body>
 </html>
