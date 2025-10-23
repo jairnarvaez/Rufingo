@@ -471,7 +471,21 @@
                         <span>Inicio</span>
                     </a>
                 </li>
-                
+
+                <li class="menu-item">
+                    <a href="{% url 'sesion_repaso' %}" class="menu-link {% if request.resolver_match.url_name == 'sesion_repaso' %}active{% endif %}">
+                        <span class="menu-icon">🎯</span>
+                        <span>Repasar</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="{% url 'configuracion_notificaciones' %}" class="menu-link {% if request.resolver_match.url_name == 'configuracion_notificaciones' %}active{% endif %}">
+                        <span class="menu-icon">🔔</span>
+                        <span>Notificaciones</span>
+                    </a>
+                </li>
+                                                
                 <li class="menu-item">
                     <a href="{% url 'lista_tarjetas' %}" class="menu-link {% if request.resolver_match.url_name == 'lista_tarjetas' %}active{% endif %}">
                         <span class="menu-icon">📚</span>
@@ -485,14 +499,7 @@
                         <span>Nueva Tarjeta</span>
                     </a>
                 </li>
-                
-                <li class="menu-item">
-                    <a href="{% url 'sesion_repaso' %}" class="menu-link {% if request.resolver_match.url_name == 'sesion_repaso' %}active{% endif %}">
-                        <span class="menu-icon">🎯</span>
-                        <span>Repasar</span>
-                    </a>
-                </li>
-                
+                                
                 <li class="menu-item">
                     <a href="{% url 'estadisticas' %}" class="menu-link {% if request.resolver_match.url_name == 'estadisticas' %}active{% endif %}">
                         <span class="menu-icon">📊</span>
@@ -500,13 +507,7 @@
                     </a>
                 </li>
                 
-                <li class="menu-item">
-                    <a href="{% url 'configuracion_notificaciones' %}" class="menu-link {% if request.resolver_match.url_name == 'configuracion_notificaciones' %}active{% endif %}">
-                        <span class="menu-icon">🔔</span>
-                        <span>Notificaciones</span>
-                    </a>
-                </li>
-                
+
                 {% if user.is_authenticated %}
                 <li class="menu-item" style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--medium-gray);">
                     <a href="#" id="logout-btn" class="menu-link" style="color: var(--rufingo-danger);">
