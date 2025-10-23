@@ -354,6 +354,17 @@
             background: var(--light-gray);
             border-radius: 10px;
         }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
         
         /* RESPONSIVE */
         @media (max-width: 768px) {
@@ -420,7 +431,7 @@
                 {% if user.is_authenticated %}
                 <div class="avatar">{{ user.username.0|upper }}</div>
                 <div class="username">{{ user.username }}</div>
-                <div class="level">Estudiante Activo 📚</div>
+                <div class="level">Estudiante Activo </div>
                 {% else %}
                 <div class="avatar">👤</div>
                 <div class="username">Invitado</div>
