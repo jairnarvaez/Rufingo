@@ -89,6 +89,7 @@ def crear_tarjeta(request):
 
         usuario = request.user
         settings = usuario.settings
+        settings.reset_contador_si_necesario()
         settings.tarjetas_nuevas_hoy += 1
         
         if settings.tarjetas_nuevas_hoy > settings.max_tarjetas_nuevas_diarias:

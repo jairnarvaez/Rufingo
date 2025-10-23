@@ -262,21 +262,4 @@ def get_next_card(usuario):
     if tarjeta_vencida:
         return tarjeta_vencida
     
-    # Prioridad 2: Tarjetas nuevas (verificar límite diario)
-    settings = usuario.settings
-    settings.reset_contador_si_necesario()
-    
-    if settings.tarjetas_nuevas_hoy < settings.max_tarjetas_nuevas_diarias:
-        tarjeta_nueva = Card.objects.filter(
-            usuario=usuario,
-            estado='nuevo'
-        ).first()
-        
-        if tarjeta_nueva:
-            # Incrementar contador
-            settings.tarjetas_nuevas_hoy += 1
-            settings.save()
-            return tarjeta_nueva
-    
-    # No hay tarjetas pendientes
     return None
