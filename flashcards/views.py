@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Card, UserSettings
+from .models import Card, UserSettings, ReviewLog, Subscription 
 from .utils import get_next_card, update_card
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 import json
+import os
+from django.conf import settings
+
 
 @login_required
 def home(request):
@@ -279,3 +282,51 @@ def tarjetas_pendientes_api(request):
     ).exclude(estado='nuevo').count()
 
     return JsonResponse({'pendientes': pendientes})
+
+
+@login_required
+@require_POST
+def guardar_suscripcion(request):
+    """Guarda la suscripción de notificaciones push del usuario"""
+    try:
+        data = json.loads(request.body)
+        endpoint = data.get('endpoint')
+        p256dh = data.get('keys', {}).get('p256dh')
+        auth = data.get('keys', {}).get('auth')
+        
+        if not endpoint or not p256dh or not auth:
+            return JsonResponse({'error': 'Datos incompletos'}, status=400)
+        
+        # Crear o actualizar suscripción
+        subscription, created = Subscription.objects.get_or_create(
+            usuario=request.user,
+            endpoint=endpoint,
+            defaults={'p256dh': p256dh, 'auth': auth}
+        )
+        
+        if not created:
+            subscription.p256dh = p256dh
+            subscription.auth = auth
+            subscription.save()
+        
+        return JsonResponse({
+            'success': True,
+            'mensaje': '✅ Notificaciones activadas correctamente'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@login_required
+def configuracion_notificaciones(request):
+    """Vista para configurar notificaciones"""
+    # Verificar si el usuario tiene suscripciones activas
+    tiene_suscripcion = Subscription.objects.filter(usuario=request.user).exists()
+    
+    context = {
+        'tiene_suscripcion': tiene_suscripcion,
+        'vapid_public_key': "BEfSLf_2i2z9fKWCyBrGzhWSNMa2DfOZR4exivUaapIH5QklCsTOQ9Cv-JRzQrbzVqIkkZ6hin3CYAeHeuI4flM=",
+    }
+    
+    return render(request, 'flashcards/configuracion_notificaciones.html', context)

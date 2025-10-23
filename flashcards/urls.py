@@ -17,4 +17,6 @@ urlpatterns = [
     
     path('api/tarjetas_pendientes/', views.tarjetas_pendientes_api, name='tarjetas_pendientes_api'),
 
+    path('notificaciones/', views.configuracion_notificaciones, name='configuracion_notificaciones'),
+    path('api/suscripcion/', views.guardar_suscripcion, name='guardar_suscripcion'),
 ]

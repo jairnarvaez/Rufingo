@@ -39,8 +39,8 @@ self.addEventListener('fetch', event => {
 self.addEventListener('push', event => {
   const options = {
     body: event.data ? event.data.text() : '¡Tienes tarjetas pendientes!',
-    icon: '/static/icon-192.png',
-    badge: '/static/icon-192.png',
+    icon: '/static/android-chrome-192x192.png',
+    badge: '/static/android-chrome-192x192.png',
     vibrate: [200, 100, 200],
     tag: 'rufingo-notification',
     requireInteraction: true

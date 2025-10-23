@@ -135,17 +135,18 @@
 </head>
 <body>
     <div class="container">
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">🏠 Inicio</a></li>
-                <li><a href="{% url 'lista_tarjetas' %}">📚 Mis Tarjetas</a></li>
-                <li><a href="{% url 'crear_tarjeta' %}">➕ Nueva Tarjeta</a></li>
-                <li><a href="{% url 'estadisticas' %}">📊 Estadísticas</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}">🚪 Salir</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+		<nav>
+		    <ul>
+		        <li><a href="{% url 'home' %}">🏠 Inicio</a></li>
+		        <li><a href="{% url 'lista_tarjetas' %}">📚 Mis Tarjetas</a></li>
+		        <li><a href="{% url 'crear_tarjeta' %}">➕ Nueva Tarjeta</a></li>
+		        <li><a href="{% url 'estadisticas' %}">📊 Estadísticas</a></li>
+		        <li><a href="{% url 'configuracion_notificaciones' %}">🔔 Notificaciones</a></li>
+		        {% if user.is_authenticated %}
+		        <li><a href="{% url 'logout' %}">🚪 Salir</a></li>
+		        {% endif %}
+		    </ul>
+		</nav>
         
         {% if user.is_authenticated %}
         <div class="user-info">
@@ -180,8 +181,8 @@
 	        navigator.serviceWorker.getRegistration().then(reg => {
 	            if (reg) {
 	                reg.showNotification('Rufingo', {
-	                    body: 'Esto es una notificación de prueba 💪',
-	                    icon: '/static/icon-192.png',
+	                    body: 'Esto es una notificación de prueba',
+	                    icon: '/static/android-chrome-192x192.png',
 	                    vibrate: [200, 100, 200],
 	                    tag: 'test-notification'
 	                });

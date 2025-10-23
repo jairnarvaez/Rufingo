@@ -1,0 +1,183 @@
+{% extends 'flashcards/base.html' %}
+
+{% block title %}Notificaciones - Rufingo{% endblock %}
+
+{% block content %}
+<h1>🔔 Configuración de Notificaciones</h1>
+
+<div style="max-width: 700px; margin: 30px auto;">
+    <div style="background: #e7f3ff; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #2196F3;">
+        <h3 style="color: #1976D2; margin-bottom: 15px;">ℹ️ Acerca de las notificaciones</h3>
+        <p style="color: #1976D2; line-height: 1.6;">
+            Las notificaciones push te avisarán cuando tengas tarjetas pendientes para repasar. 
+            Recibirás alertas incluso cuando el navegador esté cerrado.
+        </p>
+    </div>
+    
+    <div id="notification-status" style="padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <div id="status-checking" style="text-align: center;">
+            <p style="font-size: 18px; color: #666;">⏳ Verificando estado...</p>
+        </div>
+        
+        <div id="status-unsupported" style="display: none;">
+            <p style="font-size: 18px; color: #dc3545;">❌ Tu navegador no soporta notificaciones push</p>
+            <p style="color: #666; margin-top: 10px;">Intenta usar Chrome, Firefox, Edge o Safari.</p>
+        </div>
+        
+        <div id="status-denied" style="display: none;">
+            <p style="font-size: 18px; color: #dc3545;">🚫 Has bloqueado las notificaciones</p>
+            <p style="color: #666; margin-top: 10px;">Para activarlas, ve a la configuración de tu navegador y permite las notificaciones para este sitio.</p>
+        </div>
+        
+        <div id="status-enabled" style="display: none; text-align: center;">
+            <p style="font-size: 18px; color: #28a745; margin-bottom: 20px;">✅ Notificaciones activadas</p>
+            <button onclick="probarNotificacion()" class="btn" style="margin-right: 10px;">🔔 Probar Notificación</button>
+            <button onclick="desactivarNotificaciones()" class="btn btn-danger">🔕 Desactivar</button>
+        </div>
+        
+        <div id="status-disabled" style="display: none; text-align: center;">
+            <p style="font-size: 18px; color: #666; margin-bottom: 20px;">🔕 Notificaciones desactivadas</p>
+            <button onclick="activarNotificaciones()" class="btn">🔔 Activar Notificaciones</button>
+        </div>
+    </div>
+    
+    <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 5px solid #ffc107;">
+        <h4 style="color: #856404; margin-bottom: 10px;">💡 Consejos:</h4>
+        <ul style="color: #856404; line-height: 1.8;">
+            <li>Las notificaciones se envían automáticamente cuando tienes tarjetas pendientes</li>
+            <li>Puedes desactivarlas en cualquier momento</li>
+            <li>En Android, puedes instalar Rufingo como app para una mejor experiencia</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+const VAPID_PUBLIC_KEY = '{{ vapid_public_key }}';
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+    
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+async function verificarEstado() {
+    // Ocultar todos los estados
+    document.getElementById('status-checking').style.display = 'none';
+    document.getElementById('status-unsupported').style.display = 'none';
+    document.getElementById('status-denied').style.display = 'none';
+    document.getElementById('status-enabled').style.display = 'none';
+    document.getElementById('status-disabled').style.display = 'none';
+    
+    // Verificar soporte
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        document.getElementById('status-unsupported').style.display = 'block';
+        return;
+    }
+    
+    // Verificar permisos
+    const permission = Notification.permission;
+    
+    if (permission === 'denied') {
+        document.getElementById('status-denied').style.display = 'block';
+        return;
+    }
+    
+    // Verificar suscripción
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        
+        if (subscription) {
+            document.getElementById('status-enabled').style.display = 'block';
+        } else {
+            document.getElementById('status-disabled').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error verificando estado:', error);
+        document.getElementById('status-disabled').style.display = 'block';
+    }
+}
+
+async function activarNotificaciones() {
+    try {
+        // Solicitar permiso
+        const permission = await Notification.requestPermission();
+        
+        if (permission !== 'granted') {
+            alert('❌ Necesitas permitir las notificaciones para continuar');
+            return;
+        }
+        
+        // Obtener Service Worker registration
+        const registration = await navigator.serviceWorker.ready;
+        
+        // Suscribirse a push
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+        
+        // Enviar suscripción al servidor
+        const response = await fetch('{% url "guardar_suscripcion" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(subscription.toJSON())
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Notificaciones activadas correctamente');
+            verificarEstado();
+        } else {
+            alert('❌ Error: ' + data.error);
+        }
+        
+    } catch (error) {
+        console.error('Error activando notificaciones:', error);
+        alert('❌ Error al activar notificaciones: ' + error.message);
+    }
+}
+
+async function desactivarNotificaciones() {
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        
+        if (subscription) {
+            await subscription.unsubscribe();
+            alert('🔕 Notificaciones desactivadas');
+            verificarEstado();
+        }
+    } catch (error) {
+        console.error('Error desactivando notificaciones:', error);
+        alert('❌ Error al desactivar notificaciones');
+    }
+}
+
+async function probarNotificacion() {
+    if (Notification.permission === 'granted') {
+        new Notification('🎓 Rufingo', {
+            body: '¡Esta es una notificación de prueba! 📚',
+            icon: '/static/icon-192.png',
+            badge: '/static/icon-192.png'
+        });
+    }
+}
+
+// Verificar estado al cargar
+verificarEstado();
+</script>
+{% endblock %}
