@@ -10,35 +10,50 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        :root {
+            --russian-red: #D52B1E;
+            --russian-blue: #0039A6;
+            --russian-gold: #FFD700;
+            --light-gray: #F5F5F5;
+            --dark-gray: #424242;
+        }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Nunito', sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
         }
         
         .login-container {
             background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 100%;
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 90%;
+        }
+
+		.logo {
+            text-align: center;
+            margin-bottom: 2rem;
         }
         
-        h1 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 32px;
+        .logo h1 {
+            font-size: 2.5rem;
+            color: var(--russian-red);
+            font-weight: 800;
+        }
+
+        .logo p {
+            color: var(--dark-gray);
+            font-weight: 600;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
         
         label {
@@ -50,34 +65,37 @@
         
         input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.3s ease;
         }
         
         input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--russian-red);
+            box-shadow: 0 0 0 3px rgba(213, 43, 30, 0.1);
         }
         
         .btn {
             width: 100%;
-            padding: 12px;
-            background: #667eea;
+            padding: 1rem;
+            background: var(--russian-red);
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
         }
         
         .btn:hover {
-            background: #5568d3;
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(213, 43, 30, 0.3);
         }
         
         .error {
@@ -92,8 +110,11 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>🎓 Rufingo</h1>
-        
+    	<div class="logo">
+        	<h1>🐻 Rufingo 🐻</h1>
+        	<p>Aprende ruso de forma divertida</p>
+    	</div>
+
         {% if form.errors %}
         <div class="error">
             ❌ Usuario o contraseña incorrectos
@@ -104,16 +125,16 @@
             {% csrf_token %}
             
             <div class="form-group">
-                <label for="id_username">👤 Usuario:</label>
+                <label for="id_username"> Usuario:</label>
                 <input type="text" name="username" id="id_username" required autofocus>
             </div>
             
             <div class="form-group">
-                <label for="id_password">🔒 Contraseña:</label>
+                <label for="id_password"> Contraseña:</label>
                 <input type="password" name="password" id="id_password" required>
             </div>
             
-            <button type="submit" class="btn">🚀 Iniciar Sesión</button>
+            <button type="submit" class="btn"> Iniciar Sesión</button>
             
             <input type="hidden" name="next" value="{{ next }}">
         </form>
