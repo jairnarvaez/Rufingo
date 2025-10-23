@@ -390,69 +390,67 @@
             transition: all 0.3s;
         }
         
+		.sidebar.hidden {
+		    transform: translateX(-100%);
+		}
 
+		/* === BOTÓN FLOTANTE === */
+		.sidebar-toggle {
+		    display: none; /* oculto por defecto en desktop */
+		    position: fixed;
+		    bottom: 1.5rem;
+		    right: 1.5rem;
+		    width: 3.2rem;
+		    height: 3.2rem;
+		    border-radius: 50%;
+		    border: none;
+		    background: #fff;
+		    color: #333;
+		    font-size: 1.5rem;
+		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+		    cursor: pointer;
+		    z-index: 1000;
+		    transition: background 0.2s ease, transform 0.2s ease;
+		}
 
-.sidebar.hidden {
-    transform: translateX(-100%);
-}
+		.sidebar-toggle:hover {
+		    background: #f8f8f8;
+		    transform: scale(1.05);
+		}
 
-/* === BOTÓN FLOTANTE === */
-.sidebar-toggle {
-    display: none; /* oculto por defecto en desktop */
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 3.2rem;
-    height: 3.2rem;
-    border-radius: 50%;
-    border: none;
-    background: #fff;
-    color: #333;
-    font-size: 1.5rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    z-index: 1000;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
+		/* === MODO MÓVIL === */
+		@media (max-width: 768px) {
+		    .sidebar-toggle {
+		        display: flex;
+		        align-items: center;
+		        justify-content: center;
+		    }
 
-.sidebar-toggle:hover {
-    background: #f8f8f8;
-    transform: scale(1.05);
-}
+		    .sidebar {
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        height: 100%;
+		        width: 100%;
+		        max-width: 288px;
+		        background: #fff;
+		        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+		        z-index: 999;
+		    }
 
-/* === MODO MÓVIL === */
-@media (max-width: 768px) {
-    .sidebar-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+		    .container {
+		        flex-direction: column;
+		    }
 
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 80%;
-        max-width: 280px;
-        background: #fff;
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-        z-index: 999;
-    }
+		    .main-content {
+		        margin-left: 0;
+		        padding: 1.5rem;
+		    }
 
-    .container {
-        flex-direction: column;
-    }
-
-    .main-content {
-        margin-left: 0;
-        padding: 1.5rem;
-    }
-
-    .progress-section, .rufingo-mascot {
-        display: none;
-    }
-}
+		    .progress-section, .rufingo-mascot {
+		        display: none;
+		    }
+		}
 
 
         
@@ -683,14 +681,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('sidebar-toggle');
     const sidebar = document.querySelector('.sidebar');
 
-    // Oculto por defecto en móvil
-    sidebar.classList.add('hidden');
-
+    // Mostrar/ocultar con el botón
     toggleBtn.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
     });
+
+    // Detectar cambio de tamaño de pantalla
+    const handleResize = () => {
+        if (window.innerWidth > 768) {
+            // En escritorio: siempre visible
+            sidebar.classList.remove('hidden');
+        } else {
+            // En móvil: oculto por defecto
+            sidebar.classList.add('hidden');
+        }
+    };
+
+    // Ejecutar al cargar y al redimensionar
+    handleResize();
+    window.addEventListener('resize', handleResize);
 });
 </script>
+
 
     
 </body>
