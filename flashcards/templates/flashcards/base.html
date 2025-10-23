@@ -28,6 +28,30 @@
             --medium-gray: #E0E0E0;
             --dark-gray: #424242;
            --orange-practice: #FF6D00;
+
+           /* Neutrals */
+           --background: 0 0% 96%;
+           --foreground: 0 0% 26%;
+           
+           --card: 0 0% 100%;
+           --card-foreground: 0 0% 26%;
+           
+           --popover: 0 0% 100%;
+           --popover-foreground: 0 0% 26%;
+
+           /* Accent - Orange Practice */
+           --accent: 26 100% 50%;
+           --accent-foreground: 0 0% 100%;
+           
+           --destructive: 0 65% 51%;
+           --destructive-foreground: 0 0% 100%;
+           
+           --border: 0 0% 88%;
+           --input: 0 0% 88%;
+           --ring: 5 76% 50%;
+           
+           --radius: 1rem;
+           
         }
         
         * {
@@ -227,7 +251,7 @@
         /* CONTENIDO PRINCIPAL */
         .main-content {
             flex: 1;
-            padding: 2.5rem;
+            padding: 2rem;
             overflow-y: auto;
             margin-left: 280px;
             background: var(--light-gray);
@@ -373,6 +397,7 @@
             }
             
             .sidebar {
+            	display: none;
                 width: 100%;
                 position: static;
                 height: auto;

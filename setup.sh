@@ -63,3 +63,6 @@ echo ""
 echo "Para crear un backup:"
 echo "  python manage.py backup_db"
 echo ""
+
+
+python manage.py collectstatic --noinput     
