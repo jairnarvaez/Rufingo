@@ -461,14 +461,12 @@
     <!-- HEADER -->
     <header class="header">
         <a href="{% url 'home' %}" class="logo">
-            <div class="logo-icon">🎓</div>
+            <div class="logo-icon">🐻</div>
             <span>Rufingo</span>
         </a>
         <div class="header-nav">
             {% if user.is_authenticated %}
-            <div class="streak-counter" title="Racha de días">
-                🔥 <span>{{ user.settings.tarjetas_nuevas_hoy|default:"0" }}</span>
-            </div>
+          
             <div class="gems" title="Tarjetas completadas">
                 💎 <span>{{ total_completadas|default:"0" }}</span>
             </div>
