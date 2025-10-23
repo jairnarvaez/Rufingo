@@ -45,14 +45,53 @@
     </div>
 </div>
 
-<div style="margin-top: 40px; text-align: center; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+<div id="contenedor-repaso" 
+     style="margin-top: 40px; text-align: center; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
     {% if tarjetas_pendientes > 0 %}
-    <a href="{% url 'sesion_repaso' %}" class="btn" style="font-size: 20px; padding: 18px 40px; background: #28a745;">
+    <a id="boton-repaso" href="{% url 'sesion_repaso' %}" class="btn" 
+       style="font-size: 20px; padding: 18px 40px; background: #28a745;">
         🎯 Comenzar Repaso ({{ tarjetas_pendientes }} pendiente{{ tarjetas_pendientes|pluralize }})
     </a>
     {% endif %}
     <a href="{% url 'crear_tarjeta' %}" class="btn" style="font-size: 18px; padding: 15px 30px;">➕ Crear Nueva Tarjeta</a>
 </div>
+
+
+<script>
+async function actualizarBotonRepaso() {
+    try {
+        const response = await fetch("{% url 'tarjetas_pendientes_api' %}");
+        const data = await response.json();
+        const contenedor = document.getElementById('contenedor-repaso');
+        const botonExistente = document.getElementById('boton-repaso');
+
+        if (data.pendientes > 0) {
+            // Crear o actualizar el botón
+            const texto = `🎯 Comenzar Repaso (${data.pendientes} pendiente${data.pendientes === 1 ? '' : 's'})`;
+            if (botonExistente) {
+                botonExistente.textContent = texto;
+            } else {
+                const nuevoBoton = document.createElement('a');
+                nuevoBoton.id = 'boton-repaso';
+                nuevoBoton.href = "{% url 'sesion_repaso' %}";
+                nuevoBoton.className = 'btn';
+                nuevoBoton.style = "font-size: 20px; padding: 18px 40px; background: #28a745;";
+                nuevoBoton.textContent = texto;
+                contenedor.prepend(nuevoBoton);
+            }
+        } else if (botonExistente) {
+            // Eliminar el botón si ya no hay tarjetas
+            botonExistente.remove();
+        }
+    } catch (error) {
+        console.error('Error al actualizar botón de repaso:', error);
+    }
+}
+
+// Ejecutar al cargar y cada 30s
+actualizarBotonRepaso();
+setInterval(actualizarBotonRepaso, 5000);
+</script>
 
 
 {% endblock %}

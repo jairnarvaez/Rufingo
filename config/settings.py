@@ -108,12 +108,31 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
+# USE_I18N = True
+
+# USE_TZ = True
+
+# settings.py
+
+# 1. LANGUAGE_CODE: Establece el idioma predeterminado de la aplicación (para mensajes, formularios, etc.)
+# Si tu aplicación es principalmente para usuarios de habla hispana, usa 'es' (español).
+LANGUAGE_CODE = 'es' 
+
+# 2. TIME_ZONE: Esta es la configuración clave.
+# Úsala para indicar la zona horaria *predeterminada* para tu servidor o región principal.
+# Debe coincidir con la que usa tu sistema (America/Bogota).
+TIME_ZONE = 'America/Bogota'
+
+# 3. USE_I18N: Activa el soporte para internacionalización (traducciones, formatos).
 USE_I18N = True
 
+# 4. USE_TZ: ¡Crucial! Le dice a Django que almacene todas las fechas y horas en la base de datos como UTC
+# y que las convierta a la zona definida en TIME_ZONE o a la zona horaria del usuario cuando sea necesario.
+# (Esto ya lo tienes correctamente en True).
 USE_TZ = True
 
 

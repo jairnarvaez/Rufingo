@@ -198,6 +198,7 @@
     let startTime = performance.now();
     let timerInterval;
     let isFlipped = false;
+    let tiempoRespuesta = 0.0;
     
     // Iniciar temporizador
     function iniciarTimer() {
@@ -212,6 +213,10 @@
         const flashcard = document.getElementById('flashcard');
         flashcard.classList.add('flipped');
         isFlipped = true;
+        
+        clearInterval(timerInterval);
+        tiempoRespuesta = (performance.now() - startTime) / 1000;
+        
     }
     
     // Calificar respuesta
@@ -220,9 +225,6 @@
             alert('⚠️ Primero debes ver la respuesta');
             return;
         }
-        
-        clearInterval(timerInterval);
-        const tiempoRespuesta = (performance.now() - startTime) / 1000;
         
         // Mostrar loading
         document.getElementById('flashcard').style.display = 'none';
@@ -263,7 +265,7 @@
     }
     
     // Iniciar al cargar
-    iniciarTimer();
+    window.addEventListener('load', iniciarTimer);
     
     // Atajos de teclado
     document.addEventListener('keydown', (e) => {

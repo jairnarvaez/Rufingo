@@ -26,7 +26,7 @@ def home(request):
         usuario=user,
         siguiente_repeticion__lte=ahora
     ).exclude(estado='nuevo').count()
-    
+
     # Settings del usuario
     settings = user.settings
     settings.reset_contador_si_necesario()
@@ -93,7 +93,9 @@ def crear_tarjeta(request):
         Card.objects.create(
             usuario=request.user,
             frente=frente,
-            reverso=reverso
+            reverso=reverso,
+            estado='aprendizaje',
+            siguiente_repeticion=timezone.now()
         )
         
         messages.success(request, '✅ Tarjeta creada exitosamente.')
@@ -257,3 +259,14 @@ def procesar_respuesta(request):
 def resultado_repaso(request):
     """Vista de resultados después de completar el repaso"""
     return render(request, 'flashcards/resultado_repaso.html')
+
+def tarjetas_pendientes_api(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'pendientes': 0})
+
+    pendientes = Card.objects.filter(
+        usuario=request.user,
+        siguiente_repeticion__lte=timezone.now()
+    ).exclude(estado='nuevo').count()
+
+    return JsonResponse({'pendientes': pendientes})

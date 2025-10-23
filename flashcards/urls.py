@@ -14,4 +14,7 @@ urlpatterns = [
     path('repaso/', views.sesion_repaso, name='sesion_repaso'),
     path('api/respuesta/', views.procesar_respuesta, name='procesar_respuesta'),
     path('repaso/completado/', views.resultado_repaso, name='resultado_repaso'),
+    
+    path('api/tarjetas_pendientes/', views.tarjetas_pendientes_api, name='tarjetas_pendientes_api'),
+
 ]
