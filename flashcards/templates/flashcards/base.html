@@ -171,29 +171,6 @@
     
     {% block extra_js %}{% endblock %}
 
-	<button onclick="probarNotificacion()" class="btn" style="margin-top: 20px;">
-	    🔔 Probar Notificación
-	</button>
-
-	<script>
-	function probarNotificacion() {
-	    if (Notification.permission === 'granted') {
-	        navigator.serviceWorker.getRegistration().then(reg => {
-	            if (reg) {
-	                reg.showNotification('Rufingo', {
-	                    body: 'Esto es una notificación de prueba',
-	                    icon: '/static/android-chrome-192x192.png',
-	                    vibrate: [200, 100, 200],
-	                    tag: 'test-notification'
-	                });
-	            }
-	        });
-	    } else {
-	        alert('Debes permitir las notificaciones primero.');
-	    }
-	}
-	</script>
-
 	<script>
 	document.addEventListener("DOMContentLoaded", () => {
 	  const logoutBtn = document.getElementById("logout-btn");
