@@ -31,11 +31,21 @@ self.addEventListener('activate', event => {
 
 // Interceptar peticiones
 self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
+  // No cachear vistas dinámicas
+  if (url.pathname === '/' || url.pathname.startsWith('/repaso') || url.pathname.startsWith('/tarjetas')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Para recursos estáticos, sí usar la caché
   event.respondWith(
     caches.match(event.request)
       .then(response => response || fetch(event.request))
   );
 });
+
 
 // Listener para notificaciones push
 self.addEventListener('push', event => {

@@ -3,11 +3,11 @@
 echo "🚀 Configurando Rufingo..."
 
 # Crear entorno virtual
-python -m venv venv
+# python -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias
-pip install -r requirements.txt
+# pip install -r requirements.txt
 
 # Crear .env si no existe
 if [ ! -f .env ]; then

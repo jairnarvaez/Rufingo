@@ -143,7 +143,7 @@
 		        <li><a href="{% url 'estadisticas' %}">📊 Estadísticas</a></li>
 		        <li><a href="{% url 'configuracion_notificaciones' %}">🔔 Notificaciones</a></li>
 		        {% if user.is_authenticated %}
-		        <li><a href="{% url 'logout' %}">🚪 Salir</a></li>
+		        <li><a href="#" id="logout-btn">🚪 Salir</a></li>
 		        {% endif %}
 		    </ul>
 		</nav>
@@ -193,6 +193,35 @@
 	    }
 	}
 	</script>
+
+	<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	  const logoutBtn = document.getElementById("logout-btn");
+	  if (!logoutBtn) return;
+	
+	  logoutBtn.addEventListener("click", async (e) => {
+	    e.preventDefault(); // evita que navegue inmediatamente
+	
+	    try {
+	      // Desuscribir del push manager
+	      const reg = await navigator.serviceWorker.getRegistration();
+	      if (reg) {
+	        const sub = await reg.pushManager.getSubscription();
+	        if (sub) {
+	          await sub.unsubscribe();
+	          console.log("🧹 Suscripción push eliminada del navegador");
+	        }
+	      }
+	    } catch (err) {
+	      console.warn("Error al eliminar suscripción:", err);
+	    }
+	
+	    // Ahora sí, redirige al logout de Django
+	    window.location.href = "{% url 'logout' %}";
+	  });
+	});
+	</script>
+	
 
 	    
 	<script>

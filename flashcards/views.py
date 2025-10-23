@@ -10,6 +10,9 @@ import json
 import os
 from django.conf import settings
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from flashcards.models import Subscription
 
 @login_required
 def home(request):
@@ -42,6 +45,8 @@ def home(request):
         'tarjetas_nuevas_hoy': settings.tarjetas_nuevas_hoy,
         'max_tarjetas_nuevas': settings.max_tarjetas_nuevas_diarias,
     }
+
+    print(context)
     
     return render(request, 'flashcards/home.html', context)
 
@@ -330,3 +335,10 @@ def configuracion_notificaciones(request):
     }
     
     return render(request, 'flashcards/configuracion_notificaciones.html', context)
+
+def logout_view(request):
+    """Cierra sesión y borra las suscripciones push del usuario"""
+    if request.user.is_authenticated:
+        Subscription.objects.filter(usuario=request.user).delete()
+    logout(request)
+    return redirect('home')
