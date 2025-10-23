@@ -390,35 +390,71 @@
             transition: all 0.3s;
         }
         
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-            	display: none;
-                width: 100%;
-                position: static;
-                height: auto;
-                border-right: none;
-                border-bottom: 2px solid var(--medium-gray);
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 1.5rem;
-            }
-            
-            .progress-section, .rufingo-mascot {
-                display: none;
-            }
-            
-            .header {
-              //  flex-direction: column;
-                gap: 2rem;
-            }
-        }
+
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+/* === BOTÓN FLOTANTE === */
+.sidebar-toggle {
+    display: none; /* oculto por defecto en desktop */
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: #333;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 1000;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    background: #f8f8f8;
+    transform: scale(1.05);
+}
+
+/* === MODO MÓVIL === */
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 80%;
+        max-width: 280px;
+        background: #fff;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+
+    .progress-section, .rufingo-mascot {
+        display: none;
+    }
+}
+
+
         
         {% block extra_css %}{% endblock %}
     </style>
@@ -445,11 +481,16 @@
             <div class="gems">
                 💎 <span>0</span>
             </div>
+
+
             {% endif %}
         </div>
     </header>
 
     <div class="container">
+
+       	<div id="sidebar-toggle" class="sidebar-toggle">☰ </div>
+        	
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="profile-section">
@@ -518,6 +559,7 @@
                 {% endif %}
             </ul>
         </aside>
+
 
         <!-- CONTENIDO PRINCIPAL -->
         <main class="main-content">
@@ -635,5 +677,21 @@
                 .catch(err => console.log('Error SW:', err));
         }
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    // Oculto por defecto en móvil
+    sidebar.classList.add('hidden');
+
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+    });
+});
+</script>
+
+    
 </body>
 </html>
