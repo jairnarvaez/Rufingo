@@ -15,7 +15,6 @@ def home(request):
     
     # Obtener estadísticas
     total_tarjetas = Card.objects.filter(usuario=user).count()
-    tarjetas_nuevas = Card.objects.filter(usuario=user, estado='nuevo').count()
     tarjetas_aprendizaje = Card.objects.filter(usuario=user, estado='aprendizaje').count()
     tarjetas_consolidacion = Card.objects.filter(usuario=user, estado='consolidacion').count()
     tarjetas_maduras = Card.objects.filter(usuario=user, estado='maduro').count()
@@ -33,7 +32,6 @@ def home(request):
     
     context = {
         'total_tarjetas': total_tarjetas,
-        'tarjetas_nuevas': tarjetas_nuevas,
         'tarjetas_aprendizaje': tarjetas_aprendizaje,
         'tarjetas_consolidacion': tarjetas_consolidacion,
         'tarjetas_maduras': tarjetas_maduras,
@@ -88,7 +86,17 @@ def crear_tarjeta(request):
         if not frente or not reverso:
             messages.error(request, 'Ambos campos son obligatorios.')
             return render(request, 'flashcards/crear_tarjeta.html')
+
+        usuario = request.user
+        settings = usuario.settings
+        settings.tarjetas_nuevas_hoy += 1
         
+        if settings.tarjetas_nuevas_hoy > settings.max_tarjetas_nuevas_diarias:
+            messages.error(request, 'Límite de tarjetas diarias alcanzado')
+            return render(request, 'flashcards/crear_tarjeta.html')
+            
+        settings.save()
+
         # Crear la tarjeta
         Card.objects.create(
             usuario=request.user,

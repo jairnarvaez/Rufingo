@@ -16,11 +16,6 @@
         <p style="margin: 10px 0 0 0; opacity: 0.9;">Pendientes Hoy</p>
     </div>
     
-    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
-        <h2 style="color: white; font-size: 48px; margin: 0;">{{ tarjetas_nuevas }}</h2>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">Nuevas</p>
-    </div>
-    
     <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
         <h2 style="color: white; font-size: 24px; margin: 0;">{{ tarjetas_nuevas_hoy }} / {{ max_tarjetas_nuevas }}</h2>
         <p style="margin: 10px 0 0 0; opacity: 0.9;">Nuevas Hoy</p>
@@ -30,9 +25,7 @@
 <div style="margin-top: 40px;">
     <h2>📊 Distribución por Estado</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
-        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
-            <strong>🆕 Nuevas:</strong> {{ tarjetas_nuevas }}
-        </div>
+
         <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
             <strong>📚 Aprendizaje:</strong> {{ tarjetas_aprendizaje }}
         </div>
