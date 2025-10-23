@@ -36,6 +36,18 @@ else:
     print('⚠️  El superusuario ya existe');
 "
 
+# Crear usuario normal si no existe
+echo "👤 Creando usuario normal..."
+python manage.py shell -c "
+from django.contrib.auth import get_user_model;
+User = get_user_model();
+if not User.objects.filter(username='guest').exists():
+    User.objects.create_user('guest', 'guest@rufingo.com', 'guest');
+    print('✅ Usuario normal creado: guest / guest');
+else:
+    print('⚠️  El usuario normal ya existe');
+"
+
 # Crear directorio de backups
 mkdir -p backups
 
