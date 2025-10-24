@@ -5,6 +5,8 @@ urlpatterns = [
 
     path('service-worker.js', views.service_worker, name='service_worker'),
 
+    path("cron/notificaciones/", views.ejecutar_notificaciones, name="cron_notificaciones"),
+
     path('', views.home, name='home'),
     path('tarjetas/', views.lista_tarjetas, name='lista_tarjetas'),
     path('tarjetas/crear/', views.crear_tarjeta, name='crear_tarjeta'),

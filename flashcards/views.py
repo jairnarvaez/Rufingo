@@ -17,6 +17,20 @@ from flashcards.models import Subscription
 from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
 
+import traceback
+@csrf_exempt
+def ejecutar_notificaciones(request):
+    token = request.GET.get("token")
+    if token != getattr(settings, "CRON_SECRET", None):
+        return JsonResponse({"error": "unauthorized"}, status=403)
+    try:
+        call_command("send_due_notifications")
+        return JsonResponse({"ok": True, "message": "Notificacion enviada correctamente"})
+    except Exception as e:
+        print(" Error ejecutando comando:", e)
+        traceback.print_exc()
+        return JsonResponse({"error": str(e)}, status=500)
+        
 @login_required
 @never_cache
 def home(request):
