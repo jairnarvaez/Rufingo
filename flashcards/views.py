@@ -9,13 +9,13 @@ from django.views.decorators.http import require_POST
 import json
 import os
 from django.conf import settings
-
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from flashcards.models import Subscription
-
 from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
+from django.core.management import call_command
+from django.views.decorators.csrf import csrf_exempt
 
 import traceback
 @csrf_exempt
