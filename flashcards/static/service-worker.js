@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rufingo-v2';
+const CACHE_NAME = 'rufingo-v3';
 const urlsToCache = [
   '/',
   '/static/manifest.json'
@@ -70,8 +70,7 @@ self.addEventListener('push', event => {
 // Click en notificación
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow('/')
-  );
+  const url = event.notification.data?.url || '/';
+  event.waitUntil(clients.openWindow(url));
 });
 
