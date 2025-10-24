@@ -18,6 +18,7 @@ from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
 
 @login_required
+@never_cache
 def home(request):
     """Vista principal - Dashboard"""
     user = request.user
@@ -54,6 +55,7 @@ def home(request):
     return render(request, 'flashcards/home.html', context)
 
 @login_required
+@never_cache
 def lista_tarjetas(request):
     """Vista para listar todas las tarjetas con filtros"""
     user = request.user
@@ -86,6 +88,7 @@ def lista_tarjetas(request):
     return render(request, 'flashcards/lista_tarjetas.html', context)
 
 @login_required
+@never_cache
 def crear_tarjeta(request):
     """Vista para crear una nueva tarjeta"""
     if request.method == 'POST':
@@ -122,6 +125,7 @@ def crear_tarjeta(request):
     return render(request, 'flashcards/crear_tarjeta.html')
 
 @login_required
+@never_cache
 def editar_tarjeta(request, card_id):
     """Vista para editar una tarjeta existente"""
     tarjeta = get_object_or_404(Card, id=card_id, usuario=request.user)
@@ -144,6 +148,7 @@ def editar_tarjeta(request, card_id):
     return render(request, 'flashcards/editar_tarjeta.html', {'tarjeta': tarjeta})
 
 @login_required
+@never_cache
 def eliminar_tarjeta(request, card_id):
     """Vista para eliminar una tarjeta"""
     tarjeta = get_object_or_404(Card, id=card_id, usuario=request.user)
@@ -156,6 +161,7 @@ def eliminar_tarjeta(request, card_id):
     return render(request, 'flashcards/eliminar_tarjeta.html', {'tarjeta': tarjeta})
 
 @login_required
+@never_cache
 def reiniciar_tarjeta(request, card_id):
     """Vista para reiniciar el progreso de una tarjeta"""
     tarjeta = get_object_or_404(Card, id=card_id, usuario=request.user)
@@ -176,6 +182,7 @@ def reiniciar_tarjeta(request, card_id):
     return render(request, 'flashcards/reiniciar_tarjeta.html', {'tarjeta': tarjeta})
 
 @login_required
+@never_cache
 def estadisticas(request):
     """Vista de estadísticas detalladas"""
     user = request.user
@@ -317,6 +324,7 @@ def guardar_suscripcion(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @login_required
+@never_cache
 def configuracion_notificaciones(request):
     """Vista para configurar notificaciones"""
     # Verificar si el usuario tiene suscripciones activas
@@ -329,6 +337,7 @@ def configuracion_notificaciones(request):
     
     return render(request, 'flashcards/configuracion_notificaciones.html', context)
 
+@never_cache
 def logout_view(request):
     """Cierra sesión y borra las suscripciones push del usuario"""
     if request.user.is_authenticated:
