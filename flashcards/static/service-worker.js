@@ -42,19 +42,30 @@ self.addEventListener('fetch', event => {
 
 // Listener para notificaciones push (para Fase 4)
 self.addEventListener('push', event => {
+  let data = {};
+
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (e) {
+    console.error('Error parseando push event:', e);
+  }
+
+  const title = data.title || '🎓 Rufingo';
   const options = {
-    body: event.data ? event.data.text() : '¡Tienes tarjetas pendientes!',
-    icon: '/static/android-chrome-192x192.png',
-    badge: '/static/android-chrome-192x192.png',
+    body: data.body || '¡Tienes tarjetas pendientes!',
+    icon: data.icon || '/static/android-chrome-192x192.png',
+    badge: data.badge || '/static/android-chrome-192x192.png',
+    data: { url: data.url || '/' },
     vibrate: [200, 100, 200],
     tag: 'rufingo-notification',
     requireInteraction: true
   };
-  
+
   event.waitUntil(
-    self.registration.showNotification('Rufingo', options)
+    self.registration.showNotification(title, options)
   );
 });
+
 
 // Click en notificación
 self.addEventListener('notificationclick', event => {
