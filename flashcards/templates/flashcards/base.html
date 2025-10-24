@@ -175,6 +175,7 @@
         }
         
         .profile-section {
+        	display: none;
             text-align: center;
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
@@ -442,6 +443,10 @@
 
 		/* === MODO MÓVIL === */
 		@media (max-width: 768px) {
+		    .profile-section {
+		    	display: block;
+		    }
+		
 		    .sidebar-toggle {
 		        display: flex;
 		        align-items: center;
@@ -511,7 +516,7 @@
         	
         <!-- SIDEBAR -->
         <aside class="sidebar">
-        <!--
+        
             <div class="profile-section">
                 {% if user.is_authenticated %}
                 <div class="avatar">{{ user.username.0|upper }}</div>
@@ -522,7 +527,7 @@
                 <div class="username">Invitado</div>
                 <div class="level">¡Únete ahora!</div>
                 {% endif %}
-            </div> -->
+            </div> 
             
             <ul class="sidebar-menu">
                 <li class="menu-item">
