@@ -25,23 +25,23 @@
             <option value="3" {% if filtro_fase == '3' %}selected{% endif %}>Fase 3</option>
         </select>
         
-        <button type="submit" class="btn">Filtrar</button>
-        <a href="{% url 'lista_tarjetas' %}" class="btn btn-secondary">Limpiar</a>
+        <button type="submit" class="btn-listcards">Filtrar</button>
+        <a href="{% url 'lista_tarjetas' %}" class="btn-listcards btn-secondary">Limpiar</a>
     </form>
     
-    <a href="{% url 'crear_tarjeta' %}" class="btn">➕ Nueva</a>
+    <a href="{% url 'crear_tarjeta' %}" class="btn-listcards"> Nueva</a>
 </div>
 
 {% if tarjetas %}
 <div style="margin-top: 30px;">
     {% for tarjeta in tarjetas %}
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--rufingo-blue);">
         <div style="display: flex; justify-content: space-between; align-items: start; gap: 20px;">
             <div style="flex: 1;">
                 <h3 style="color: #333; margin-bottom: 10px;">{{ tarjeta.frente }}</h3>
                 <p style="color: #666; margin-bottom: 15px;">{{ tarjeta.reverso }}</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; font-size: 14px;">
-                    <span style="background: #667eea; color: white; padding: 4px 12px; border-radius: 15px;">
+                    <span style="background: var(--rufingo-blue); color: white; padding: 4px 12px; border-radius: 15px;">
                         Estado: {{ tarjeta.get_estado_display }}
                     </span>
                     <span style="background: #764ba2; color: white; padding: 4px 12px; border-radius: 15px;">
@@ -56,9 +56,9 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; flex-direction: column;">
-                <a href="{% url 'editar_tarjeta' tarjeta.id %}" class="btn" style="padding: 8px 16px; text-align: center;">Editar</a>
-                <a href="{% url 'reiniciar_tarjeta' tarjeta.id %}" class="btn btn-secondary" style="padding: 8px 16px; text-align: center;"> Reiniciar</a>
-                <a href="{% url 'eliminar_tarjeta' tarjeta.id %}" class="btn btn-danger" style="padding: 8px 16px; text-align: center;">🗑️Eliminar</a>
+                <a href="{% url 'editar_tarjeta' tarjeta.id %}" class="btn-listcards-action" style="padding: 8px 16px; text-align: center;">Editar</a>
+                <a href="{% url 'reiniciar_tarjeta' tarjeta.id %}" class="btn-listcards-action btn-secondary" style="padding: 8px 16px; text-align: center;"> Reiniciar</a>
+                <a href="{% url 'eliminar_tarjeta' tarjeta.id %}" class="btn-listcards-action btn-danger" style="padding: 8px 16px; text-align: center;">Eliminar</a>
             </div>
         </div>
     </div>

@@ -7,8 +7,8 @@
 
 <div style="max-width: 600px; margin: 30px auto; text-align: center;">
 <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; border: 2px solid #17a2b8; margin-bottom: 30px;">
-<p style="font-size: 18px; margin-bottom: 15px;">🔄 ¿Deseas reiniciar el progreso de esta tarjeta?</p>
-<div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+<p style="font-size: 18px; margin-bottom: 15px;"> ¿Deseas reiniciar el progreso de esta tarjeta?</p>
+<div style=" padding: 15px; border-radius: 5px; margin-top: 15px;">
 <strong>Pregunta:</strong> {{ tarjeta.frente }}<br>
 <strong>Respuesta:</strong> {{ tarjeta.reverso }}
 </div>
@@ -16,8 +16,8 @@
 </div>
 <form method="post" style="display: inline;">
     {% csrf_token %}
-    <button type="submit" class="btn">🔄 Sí, Reiniciar</button>
-    <a href="{% url 'lista_tarjetas' %}" class="btn btn-secondary">❌ Cancelar</a>
+    <button type="submit" class="btn"> Sí, Reiniciar</button>
+    <a href="{% url 'lista_tarjetas' %}" class="btn btn-secondary"> Cancelar</a>
 </form>
 </div>
 {% endblock %}

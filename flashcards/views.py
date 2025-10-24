@@ -163,7 +163,7 @@ def reiniciar_tarjeta(request, card_id):
     tarjeta = get_object_or_404(Card, id=card_id, usuario=request.user)
     
     if request.method == 'POST':
-        tarjeta.estado = 'nuevo'
+        tarjeta.estado = 'aprendizaje'
         tarjeta.fase = 1
         tarjeta.intervalo_actual = 5.0
         tarjeta.EF = 2.5
