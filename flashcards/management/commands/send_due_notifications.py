@@ -38,8 +38,8 @@ class Command(BaseCommand):
                         mensaje = {
                             "title": "🎓 Rufingo",
                             "body": f"¡Tienes {tarjetas_pendientes} tarjeta{'s' if tarjetas_pendientes > 1 else ''} pendiente{'s' if tarjetas_pendientes > 1 else ''} para repasar!",
-                            "icon": "/static/icon-192.png",
-                            "badge": "/static/icon-192.png",
+                            "icon": "/static/android-chrome-192x192.png",
+                            "badge": "/static/android-chrome-192x192.png",
                             "url": "/repaso/"
                         }
                         
