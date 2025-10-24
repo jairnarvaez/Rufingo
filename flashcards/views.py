@@ -116,7 +116,7 @@ def crear_tarjeta(request):
         )
         
         messages.success(request, '✅ Tarjeta creada exitosamente.')
-        return redirect('lista_tarjetas')
+        return redirect('crear_tarjeta')
     
     return render(request, 'flashcards/crear_tarjeta.html')
 
