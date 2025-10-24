@@ -699,14 +699,22 @@
         });
     </script>
     
-    <!-- Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/static/service-worker.js')
-                .then(reg => console.log('SW registrado', reg))
-                .catch(err => console.log('Error SW:', err));
-        }
-    </script>
+	<!-- Service Worker -->
+	<script>
+	    if ('serviceWorker' in navigator) {
+	        window.addEventListener('load', () => {
+	            navigator.serviceWorker.register('/service-worker.js')
+	                .then(registration => {
+	                    console.log(' SW registrado:', registration.scope);
+	                })
+	                .catch(error => {
+	                    console.error(' Error SW:', error);
+	                });
+	        });
+	    } else {
+	        console.warn('⚠️Service Workers no soportados');
+	    }
+	</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {

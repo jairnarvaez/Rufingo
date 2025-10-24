@@ -14,6 +14,9 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect
 from flashcards.models import Subscription
 
+from django.http import HttpResponse
+from django.views.decorators.cache import never_cache
+
 @login_required
 def home(request):
     """Vista principal - Dashboard"""
@@ -50,7 +53,6 @@ def home(request):
     
     return render(request, 'flashcards/home.html', context)
 
-
 @login_required
 def lista_tarjetas(request):
     """Vista para listar todas las tarjetas con filtros"""
@@ -82,7 +84,6 @@ def lista_tarjetas(request):
     }
     
     return render(request, 'flashcards/lista_tarjetas.html', context)
-
 
 @login_required
 def crear_tarjeta(request):
@@ -120,7 +121,6 @@ def crear_tarjeta(request):
     
     return render(request, 'flashcards/crear_tarjeta.html')
 
-
 @login_required
 def editar_tarjeta(request, card_id):
     """Vista para editar una tarjeta existente"""
@@ -143,7 +143,6 @@ def editar_tarjeta(request, card_id):
     
     return render(request, 'flashcards/editar_tarjeta.html', {'tarjeta': tarjeta})
 
-
 @login_required
 def eliminar_tarjeta(request, card_id):
     """Vista para eliminar una tarjeta"""
@@ -155,7 +154,6 @@ def eliminar_tarjeta(request, card_id):
         return redirect('lista_tarjetas')
     
     return render(request, 'flashcards/eliminar_tarjeta.html', {'tarjeta': tarjeta})
-
 
 @login_required
 def reiniciar_tarjeta(request, card_id):
@@ -176,7 +174,6 @@ def reiniciar_tarjeta(request, card_id):
         return redirect('lista_tarjetas')
     
     return render(request, 'flashcards/reiniciar_tarjeta.html', {'tarjeta': tarjeta})
-
 
 @login_required
 def estadisticas(request):
@@ -236,7 +233,6 @@ def sesion_repaso(request):
     
     return render(request, 'flashcards/sesion_repaso.html', context)
 
-
 @login_required
 @require_POST
 def procesar_respuesta(request):
@@ -271,7 +267,6 @@ def procesar_respuesta(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-
 @login_required
 def resultado_repaso(request):
     """Vista de resultados después de completar el repaso"""
@@ -287,7 +282,6 @@ def tarjetas_pendientes_api(request):
     ).exclude(estado='nuevo').count()
 
     return JsonResponse({'pendientes': pendientes})
-
 
 @login_required
 @require_POST
@@ -322,7 +316,6 @@ def guardar_suscripcion(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-
 @login_required
 def configuracion_notificaciones(request):
     """Vista para configurar notificaciones"""
@@ -342,3 +335,11 @@ def logout_view(request):
         Subscription.objects.filter(usuario=request.user).delete()
     logout(request)
     return redirect('home')
+
+@never_cache
+def service_worker(request):
+    """Sirve el service worker"""
+    sw_path = os.path.join(settings.BASE_DIR, 'flashcards', 'static', 'service-worker.js')
+    with open(sw_path, 'r') as f:
+        content = f.read()
+    return HttpResponse(content, content_type='application/javascript')
