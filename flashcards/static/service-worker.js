@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rufingo-v1';
+const CACHE_NAME = 'rufingo-v2';
 const urlsToCache = [
   '/',
   '/static/manifest.json'
