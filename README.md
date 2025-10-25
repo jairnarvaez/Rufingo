@@ -1,6 +1,6 @@
 ### Rulingo 🐻
 
-![Rulingo](./flashcards/static/rulingo.png)
+![Rulingo](flashcards/static/rulingo.png)
 
 ### Mi problema
 
