@@ -1,3 +1,7 @@
+### Rulingo 🐻
+
+![Rulingo](./flashcards/static/rulingo.png)
+
 ### Mi problema
 
 El algoritmo SM-2 está optimizado para la retención a largo plazo, pero no considera explícitamente la adquisición inicial de información. Las aplicaciones modernas combinan varias fases de repetición.
