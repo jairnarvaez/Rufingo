@@ -620,16 +620,22 @@
     <!-- SCRIPTS -->
     <script>
         function showMotivation() {
-            const messages = [
-                '¡Excelente trabajo! 🌟',
-                '¡Sigue así, lo estás haciendo genial! 🎉',
-                '¡Cada tarjeta te acerca a la maestría! 📚',
-                '¡Tu dedicación es inspiradora! 💪',
-                '¡El conocimiento es poder! ⚡',
-                '¡Eres imparable! 🚀',
-                '¡Hoy es un gran día para aprender! ☀️'
-            ];
-            
+			const messages = [
+			    '¡Excelente trabajo!',
+			    '¡Sigue así, lo estás haciendo genial!',
+			    '¡Cada tarjeta te acerca a la maestría!',
+			    '¡Tu dedicación es inspiradora!',
+			    '¡El conocimiento es poder!',
+			    '¡Eres imparable!',
+			    '¡Hoy es un gran día para aprender!',
+			    'Отличная работа!',                
+			    'Продолжай в том же духе!',       
+			    'Ты становишься всё лучше!',       
+			    'Знание — это сила.',              
+			    'Ты можешь всё!',                  
+			    'Сегодня отличный день для учёбы!' 
+			];
+
             const message = messages[Math.floor(Math.random() * messages.length)];
             
             // Crear notificación visual
