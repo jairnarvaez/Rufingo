@@ -200,6 +200,20 @@ def update_card(card, calificacion_base, tiempo_respuesta):
     
     # 5. Aplicar transiciones de fase
     fase_anterior = aplicar_transicion_fase(card, calificacion_ajustada)
+
+    # Si cambió de fase, no recalcular el intervalo en esta misma llamada
+    if card.fase != fase_anterior:
+        card.siguiente_repeticion = timezone.now() + timedelta(seconds=card.intervalo_actual)
+        card.save()
+        ReviewLog.objects.create(
+            card=card,
+            calificacion_base=calificacion_base,
+            tiempo_respuesta=tiempo_respuesta,
+            calificacion_ajustada=calificacion_ajustada,
+            fase_antes=fase_anterior,
+            fase_despues=card.fase,
+        )
+        return card
     
     # 6. Calcular siguiente intervalo según la fase
     nuevo_intervalo = None
