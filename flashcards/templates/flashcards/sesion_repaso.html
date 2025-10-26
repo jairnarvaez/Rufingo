@@ -149,24 +149,29 @@
         transform: translateY(-2px) scale(1.02);
     }
     
-    .btn-cal-5 { 
-        background: linear-gradient(135deg, #00C853, #00E676);
-    }
-    .btn-cal-4 { 
-        background: linear-gradient(135deg, #76FF03, #64DD17);
-    }
-    .btn-cal-3 { 
-        background: linear-gradient(135deg, #FFD700, #FFA000);
-    }
-    .btn-cal-2 { 
-        background: linear-gradient(135deg, #FF6D00, #F57C00);
-    }
-    .btn-cal-1 { 
-        background: linear-gradient(135deg, #D32F2F, #C62828);
-    }
-    .btn-cal-0 { 
-        background: linear-gradient(135deg, #616161, #424242);
-    }
+	.btn-cal-5 { 
+	    background: linear-gradient(135deg, #00C853, #00E676);
+	}
+
+	.btn-cal-4 { 
+	    background: linear-gradient(135deg, #FFD700, #FFC700);
+	}
+
+	.btn-cal-3 { 
+	    background: linear-gradient(135deg, #FF9100, #FF6D00);
+	}
+
+	.btn-cal-2 { 
+	    background: linear-gradient(135deg, #FF6D00, #D52B1E);
+	}
+
+	.btn-cal-1 { 
+	    background: linear-gradient(135deg, #D52B1E, #B71C1C);
+	}
+
+	.btn-cal-0 { 
+	    background: linear-gradient(135deg, #757575, #424242);
+	}
     
     .flip-btn {
         margin-top: 35px;
@@ -303,11 +308,12 @@
             <div>
                 <div class="card-label"> RESPUESTA</div>
                 <div class="card-content">{{ card.reverso }}</div>
-                
+
+                <!--
                 <div class="question-prompt">
                     ¿Qué tan bien lo recordaste?
                 </div>
-                
+                -->
                 <div class="botones-calificacion">
                     <button class="btn-calificacion btn-cal-5" onclick="calificar(5)">
                         <br><strong>Perfecto</strong>
