@@ -26,6 +26,12 @@ def ajustar_calificacion_por_tiempo(calificacion_base, tiempo_respuesta):
     6-10s: -1
     >10s: -2
     """
+
+    """
+    De momento no voy a realizar el ajuste de calificacion por tiempo, queda para implementaciones futuras
+    """
+
+    """
     if tiempo_respuesta <= 3:
         ajuste = 0
     elif tiempo_respuesta <= 6:
@@ -34,6 +40,9 @@ def ajustar_calificacion_por_tiempo(calificacion_base, tiempo_respuesta):
         ajuste = -1
     else:
         ajuste = -2
+    """
+
+    ajuste = 0
     
     calificacion_ajustada = max(0, min(5, calificacion_base + ajuste))
     return calificacion_ajustada
